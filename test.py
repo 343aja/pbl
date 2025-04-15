@@ -111,18 +111,18 @@ with st.sidebar:
         st.markdown(f"""
             <div class="prediction-item">
                 <p><strong>🔹 ID:</strong> {id}</p>
-                <p><strong>🔹 Tur:</strong> {animal_name}</p>
-                <p><strong>🔹 Bashorat:</strong> {label}</p>
-                <p><strong>🔹 Ishonch:</strong> {confidence_value*100:.1f}%</p>
-                <p><strong>🔹 Vaqt:</strong> {timestamp}</p>
+                <p><strong>🔹 Animal name:</strong> {animal_name}</p>
+                <p><strong>🔹 Prediction:</strong> {label}</p>
+                <p><strong>🔹 Accuracy:</strong> {confidence_value*100:.1f}%</p>
+                <p><strong>🔹 Time:</strong> {timestamp}</p>
             </div>
         """, unsafe_allow_html=True)
 
         # Rasmni ko‘rsatish
         if image_path and os.path.exists(image_path):
-            st.image(image_path, caption="Bashorat qilingan rasm", use_column_width=True)
+            st.image(image_path, caption="Predicted picture", use_column_width=True)
         else:
-            st.warning("Rasm topilmadi yoki yo‘q.")
+            st.warning("Image not found or missing.")
 
 
 
