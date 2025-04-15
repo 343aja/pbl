@@ -81,7 +81,7 @@ if uploaded_file is not None:
     img_array = np.expand_dims(img_array, axis=0)
 
     prediction = model.predict(img_array)
-    class_labels = ["Cat", "Horse", "Tiger", "Lion", "Jaguar", "Wolf"]
+    class_labels = ["Cat", "Horse", "Tiger","Jaguar", "Lion",  "Wolf"]
     predicted_label = class_labels[np.argmax(prediction)]
     confidence = np.max(prediction)
 
