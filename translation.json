@@ -1,8 +1,8 @@
 {
-"equus-caballus": "Horse",
-"canis-lupus": "Wolf",
-"felis-catus": "Cat",
-"panthera-tigris": "Tiger",
-"panthera-onca": "Jaguar",
-"panthera-leo": "Lion"
+    "felis-catus": "Cat",
+    "equus-caballus": "Horse",
+    "panthera-onca": "Jaguar",
+    "panthera-leo": "Lion",
+    "panthera-tigris": "Tiger",
+    "canis-lupus": "Wolf"
 }

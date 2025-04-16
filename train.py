@@ -48,4 +48,4 @@ model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=
 model.fit(train_data, epochs=10, validation_data=val_data)
 
 # Modelni saqlash
-model.save("animal_model_mobilenet.h5")
+model.save("animal_model_mobilenet_1.h5")
