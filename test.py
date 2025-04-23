@@ -57,7 +57,7 @@ def get_all_predictions():
 create_db()
 
 # 📌 Tabs yaratish
-tab1, tab2,= st.tabs(["Animal Image Classification", "EDA (Exploratory Data Analysis)",])
+tab1, tab2,tab3= st.tabs(["Animal Image Classification", "EDA (Exploratory Data Analysis)","EDA from Dataset"])
 
 # 🔹 Tab 1: Upload
 with tab1:
@@ -129,6 +129,90 @@ with tab2:
         st.pyplot(fig2)
     else:
         st.info("No prediction data available yet.")
+
+# tab3, = st.tabs(["EDA from Dataset Folder"])
+
+with tab3:
+    st.title("EDA from Dataset Folder")
+
+    dataset_path = "dataset/train"
+
+    if os.path.isdir(dataset_path):
+        image_data = []
+
+        for class_name in os.listdir(dataset_path):
+            class_folder = os.path.join(dataset_path, class_name)
+            if os.path.isdir(class_folder):
+                for filename in os.listdir(class_folder):
+                    if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                        file_path = os.path.join(class_folder, filename)
+
+                        try:
+                            image = Image.open(file_path)
+                            width, height = image.size
+                            file_size_kb = os.path.getsize(file_path) / 1024  # KB
+                            aspect_ratio = round(width / height, 2)
+
+                            image_data.append({
+                                'Class': class_name,
+                                'Width': width,
+                                'Height': height,
+                                'FileSizeKB': file_size_kb,
+                                'AspectRatio': aspect_ratio,
+                                'Path': file_path
+                            })
+                        except Exception as e:
+                            st.warning(f"Could not read image {file_path}: {e}")
+
+        df_eda = pd.DataFrame(image_data)
+
+        if not df_eda.empty:
+            st.subheader("1. Image Size Distribution (Width & Height)")
+            fig1, ax1 = plt.subplots(figsize=(8, 5))
+            sns.boxplot(data=df_eda, x='Class', y='Width', ax=ax1)
+            ax1.set_title("Width Distribution by Class")
+            st.pyplot(fig1)
+
+            fig2, ax2 = plt.subplots(figsize=(8, 5))
+            sns.boxplot(data=df_eda, x='Class', y='Height', ax=ax2)
+            ax2.set_title("Height Distribution by Class")
+            st.pyplot(fig2)
+
+            st.subheader("2. File Size Distribution (KB)")
+            fig3, ax3 = plt.subplots(figsize=(8, 5))
+            sns.boxplot(data=df_eda, x='Class', y='FileSizeKB', ax=ax3)
+            ax3.set_title("File Size Distribution by Class")
+            st.pyplot(fig3)
+
+            st.subheader("3. Aspect Ratio (Width / Height)")
+            fig4, ax4 = plt.subplots(figsize=(8, 5))
+            sns.violinplot(data=df_eda, x='Class', y='AspectRatio', ax=ax4)
+            ax4.set_title("Aspect Ratio Distribution by Class")
+            st.pyplot(fig4)
+
+            st.subheader("4. Dominant Colors (Top 10)")
+            from collections import Counter
+
+            def get_dominant_color(image_path):
+                image = Image.open(image_path).resize((50, 50))
+                pixels = np.array(image).reshape(-1, 3)
+                most_common = Counter([tuple(pixel) for pixel in pixels]).most_common(1)[0][0]
+                return '#%02x%02x%02x' % most_common
+
+            df_eda['DominantColor'] = df_eda['Path'].apply(get_dominant_color)
+
+            top_colors = df_eda['DominantColor'].value_counts().nlargest(10)
+
+            fig5, ax5 = plt.subplots(figsize=(8, 4))
+            bars = ax5.bar(top_colors.index, top_colors.values, color=top_colors.index)
+            ax5.set_title("Top 10 Dominant Colors")
+            ax5.set_ylabel("Count")
+            st.pyplot(fig5)
+
+        else:
+            st.warning("No image data found in subfolders.")
+    else:
+        st.warning("The folder path is invalid or doesn't exist.")
 
 # 🔹 Tab 3: History
 with st.sidebar:
