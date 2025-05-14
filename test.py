@@ -289,7 +289,7 @@ with tab3:
             components.html(bar_chart_size, height=500)
 
             # 3️⃣ Dominant Colors Visualization
-            st.subheader("Dominant Colors by Class")
+            st.subheader("Average Colors by Class")
             dominant_colors = df.groupby("Class")["Dominant_Color"].first().reset_index()
 
             color_blocks = ""
